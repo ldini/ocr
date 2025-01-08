@@ -2,11 +2,16 @@ import os
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 
-input_folder = r"C:/Users/Ldini/Documents/Tesseract/app/input"
-output_folder = r"C:/Users/Ldini/Documents/Tesseract/app/output"
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+input_folder = os.path.join(script_dir, "input")
+output_folder = os.path.join(script_dir, "output")
 
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
+
+if not os.path.exists(input_folder):
+    os.makedirs(input_folder)
 
 pdf_files = [f for f in os.listdir(input_folder) if f.lower().endswith('.pdf')]
 
