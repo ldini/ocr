@@ -9,7 +9,7 @@ from ocr_processor import process_pdf, input_folder, output_folder, process_exis
 # FastAPI
 app = FastAPI(
     title="PDF Processing API",
-    description="API para manejar la subida, conversión y gestión de archivos PDF utilizando OCRmyPDF.",
+    description="API para manejar la subida, conversion y gestión de archivos PDF utilizando OCRmyPDF.",
     version="1.0.0"
 )
 
