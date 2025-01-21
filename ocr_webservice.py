@@ -1,5 +1,4 @@
 import os
-import asyncio
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import FileResponse, StreamingResponse
 import zipfile
@@ -10,7 +9,7 @@ from ocr_processor import process_pdf, input_folder, output_folder, process_exis
 # FastAPI
 app = FastAPI(
     title="PDF Processing API",
-    description="API para manejar la subida, conversion y gestión de archivos PDF utilizando OCRmyPDF.",
+    description="API para manejar la subida, conversión y gestión de archivos PDF utilizando OCRmyPDF.",
     version="1.0.0"
 )
 
@@ -93,6 +92,30 @@ def delete_output_files():
             files_deleted.append(file)
     return {"message": "Archivos eliminados de la carpeta de salida.", "deleted_files": files_deleted}
 
+# Endpoint para eliminar todos los archivos de ambas carpetas
+@app.delete("/delete-all/", summary="Eliminar todos los archivos", description="Elimina todos los archivos en las carpetas de entrada y salida.")
+def delete_all_files():
+    input_deleted = []
+    output_deleted = []
+
+    for file in os.listdir(input_folder):
+        file_path = os.path.join(input_folder, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+            input_deleted.append(file)
+
+    for file in os.listdir(output_folder):
+        file_path = os.path.join(output_folder, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+            output_deleted.append(file)
+
+    return {
+        "message": "Archivos eliminados de ambas carpetas.",
+        "deleted_input_files": input_deleted,
+        "deleted_output_files": output_deleted
+    }
+
 # Endpoint para listar documentos en la carpeta output
 @app.get("/documents-output/", summary="Listar archivos de salida", description="Lista todos los archivos en la carpeta de salida.")
 def list_output_files():
@@ -105,7 +128,6 @@ def list_input_files():
     files = os.listdir(input_folder)
     return {"input_files": files}
 
-# Inicia el servidor FastAPI con un bucle de eventos
+# Inicia el servidor FastAPI
 if __name__ == "__main__":
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(uvicorn.run(app, host="0.0.0.0", port=8032))
+    uvicorn.run(app, host="0.0.0.0", port=8000)
