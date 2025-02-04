@@ -61,7 +61,7 @@ def process_existing_files():
                 # Convertir imagen a PDF y procesar
                 temp_pdf_path = os.path.join(input_folder, f"{os.path.splitext(file)[0]}.pdf")
                 if convert_image_to_pdf(input_path, temp_pdf_path):
-                    output_file = f"ocr_{os.path.splitext(file)[0]}.pdf"
+                    output_file = f"{os.path.splitext(file)[0]}.pdf"
                     output_path = os.path.join(output_folder, output_file)
                     executor.submit(process_pdf, temp_pdf_path, output_path)
 
