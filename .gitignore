@@ -1,5 +1,4 @@
 output/
-!input/
 !script.py
 __pycache__/
 nohup.out
