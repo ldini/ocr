@@ -29,6 +29,23 @@ find "$BASE_DIR" -mindepth 2 -maxdepth 2 -type f | grep -E "/[0-9A-Za-z_-]+/[0-9
     fi
 done
 
+# Verificar si hay archivos sueltos en el segundo nivel y organizarlos
+echo "🔍 Revisando si hay archivos sueltos en el segundo nivel..."
+find "$BASE_DIR" -mindepth 2 -maxdepth 2 -type f | while read FILE_PATH; do
+    FILE_NAME=$(basename "$FILE_PATH")
+    PARENT_DIR=$(dirname "$FILE_PATH")
+
+    # Extraer los tres primeros niveles del nombre del archivo (ej: 5.1.1)
+    FOLDER_NAME=$(echo "$FILE_NAME" | grep -oE "^[0-9]+\.[0-9]+\.[0-9]+")
+
+    if [[ -n "$FOLDER_NAME" ]]; then
+        DEST_DIR="$PARENT_DIR/$FOLDER_NAME"
+        mkdir -p "$DEST_DIR"
+        mv "$FILE_PATH" "$DEST_DIR/"
+        echo "✅ Archivo suelto movido: $FILE_NAME → $DEST_DIR/"
+    fi
+done
+
 echo "🚀 Monitoreando archivos dentro de subcarpetas de segundo nivel en: $BASE_DIR"
 
 # Loop infinito para monitorear la carpeta y subcarpetas de segundo nivel
