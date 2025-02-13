@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Ruta donde se ejecutará el script (MODIFICA SEGÚN TU NECESIDAD)
-BASE_DIR="/app/ocr/output/ALUAR"
+BASE_DIR="/app/ocr/input/ALUAR"
 
 # Verifica si `inotifywait` está instalado
 if ! command -v inotifywait &> /dev/null; then
